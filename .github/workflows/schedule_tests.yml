@@ -44,8 +44,8 @@ jobs:
           .venv\Scripts\activate
           python -m pip install --upgrade pip wheel
           python -m pip install -r tests/requirements/py3.txt -e .
-          echo ".venv\Scripts" >> $GITHUB_PATH
-          echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
+          echo ".venv\Scripts" >> $env:GITHUB_PATH
+          echo "VIRTUAL_ENV=.venv" >> $env:GITHUB_ENV
       - name: Save cached virtualenv
         uses: actions/cache/save@v4
         with:
