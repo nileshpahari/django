@@ -7085,6 +7085,21 @@ class SeleniumTests(AdminSeleniumTestCase):
         self.assertTrue(show_all.is_displayed())
         self.take_screenshot("pagination")
 
+    @screenshot_cases(["desktop_size", "mobile_size", "rtl", "dark", "high_contrast"])
+    def test_changelist_filter_sidebar_with_long_verbose_name(self):
+        from selenium.webdriver.common.by import By
+
+        self.admin_login(
+            username="super", password="secret", login_url=reverse("admin:index")
+        )
+        Album.objects.create(title="oasis")
+        self.selenium.get(
+            self.live_server_url + reverse("admin:admin_views_album_changelist")
+        )
+        changelist_filter = self.selenium.find_element(By.ID, "changelist-filter")
+        self.assertTrue(changelist_filter.is_displayed())
+        self.take_screenshot("filter_sidebar")
+
 
 @override_settings(ROOT_URLCONF="admin_views.urls")
 class ReadonlyTest(AdminFieldExtractionMixin, TestCase):

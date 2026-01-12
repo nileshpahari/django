@@ -668,7 +668,13 @@ class ReadOnlyPizza(Pizza):
 
 class Album(models.Model):
     owner = models.ForeignKey(User, models.SET_NULL, null=True, blank=True)
-    title = models.CharField(max_length=30)
+    title = models.CharField(
+        max_length=30,
+        verbose_name=(
+            "very very very very very very very very very "
+            "loooooooooooooooooooooooooooooooooooooooooong name"
+        ),
+    )
 
 
 class Song(models.Model):
