@@ -238,6 +238,32 @@ class PlaywrightTestCase(LiveServerTestCase, metaclass=PlaywrightTestCaseBase):
         path.parent.mkdir(exist_ok=True, parents=True)
         self.page.screenshot(path=str(path))
 
+    def assertNoAccessibilityViolations(self, context=None, options=None):
+        """
+        Assert that the current page has no accessibility violations.
+
+        Uses axe-playwright-python to run axe-core accessibility checks.
+        Skips the test if axe-playwright-python is not installed.
+
+        Args:
+            context: Optional axe-core context (selector or element reference)
+            options: Optional axe-core options (rules to run, etc.)
+
+        See https://github.com/dequelabs/axe-core/blob/develop/doc/API.md
+        for context and options documentation.
+        """
+        try:
+            from axe_playwright_python.sync_playwright import Axe
+        except ImportError:
+            self.skipTest("axe-playwright-python is not installed")
+
+        results = Axe().run(self.page, context, options)
+        self.assertEqual(
+            results.violations_count,
+            0,
+            "Accessibility violations found:\n%s" % results.generate_report(),
+        )
+
 
 def screenshot_cases(method_names):
     """
